@@ -1,0 +1,102 @@
+<main class="main">
+    <h1>Welcome to The Cocktail App 🎉</h1>
+  <div class="content">
+    <h1>Cocktails</h1>
+    <mat-form-field appearance="outline">
+      <mat-label>Search by</mat-label>
+      <mat-select [(value)]="searchType" (selectionChange)="clearSearch()">
+        <mat-option value="firstLetter">First Letter</mat-option>
+        <mat-option value="cocktailName">Cocktail Name</mat-option>
+        <mat-option value="category">Category</mat-option>
+        <mat-option value="ingredient">Ingredient</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div [ngSwitch]="searchType">
+      <!-- First letter: buttons for letters -->
+      <div *ngSwitchCase="'firstLetter'" class="letters-container">
+        <button *ngFor="let l of letters" mat-button (click)="searchByFirstLetter(l)" [class.selected-letter]="selectedLetter === l ">{{ l }}</button>
+      </div>
+
+      <!-- Category: select -->
+      <mat-form-field *ngSwitchCase="'category'" appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select (selectionChange)="searchByCategory($event.value)">
+          <mat-option *ngFor="let c of categories" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Cocktail Name: text input -->
+      <mat-form-field *ngSwitchCase="'cocktailName'">
+        <mat-label>Cocktail Name</mat-label>
+        <input matInput #nameInput (keyup.enter)="searchByCocktailName(nameInput.value)">
+      </mat-form-field>
+
+      <!-- Ingredient: text input -->
+      <mat-form-field *ngSwitchCase="'ingredient'">
+        <mat-label>Ingredient</mat-label>
+        <input matInput #ingredientInput (keyup.enter)="searchByIngredient(ingredientInput.value)">
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="currentSearchMessage" class="search-info-message">
+      {{ currentSearchMessage }}
+    </div>
+
+    <!----------------------------------------------------------TABLE------------------------------------------------------>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="idDrink">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.idDrink}} </td>
+      </ng-container>
+
+      <!-- Image Column -->
+      <ng-container matColumnDef="strDrinkThumb">
+        <th mat-header-cell *matHeaderCellDef> Image </th>
+        <td mat-cell *matCellDef="let element">
+          <img [src]="element.strDrinkThumb" alt="{{element.strDrink}}" width="100">
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="strDrink">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.strDrink}} </td>
+      </ng-container>
+
+      <!-- Category Column -->
+      <ng-container matColumnDef="strCategory">
+        <th mat-header-cell *matHeaderCellDef> Category </th>
+        <td mat-cell *matCellDef="let element"> {{element.strCategory}} </td>
+      </ng-container>
+
+      <!-- IsAlcoholic Column -->
+      <ng-container matColumnDef="strAlcoholic">
+        <th mat-header-cell *matHeaderCellDef> Is  Alcoholic </th>
+        <td mat-cell *matCellDef="let element"> {{element.strAlcoholic}} </td>
+      </ng-container>
+
+      <!-- CountIngredients Column -->
+      <ng-container matColumnDef="countIngredients">
+        <th mat-header-cell *matHeaderCellDef> Count Ingredients </th>
+        <td mat-cell *matCellDef="let element"> {{element.countIngredients}} </td>
+      </ng-container>
+
+      <!-- DateModified Column -->
+      <ng-container matColumnDef="dateModified">
+        <th mat-header-cell *matHeaderCellDef> Date Modified </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateModified}} </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when no data -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="7">No data</td>
+      </tr>
+    </table>
+
+  </div>
+</main>

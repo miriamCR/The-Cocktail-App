@@ -1,0 +1,9 @@
+.letters-container button {
+    border: 1px solid #ccc;
+    min-width: 50px;
+}
+
+.letters-container button.selected-letter {
+    background-color: #1976d2;
+    color: white;
+}
