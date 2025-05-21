@@ -6,6 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CocktailService } from '../../services/cocktail.service';
 
@@ -48,31 +50,42 @@ function extractIngredients(cocktail: any): Ingredient[]{
     MatInputModule,
     MatTableModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  displayedColumns: string[] = ['idDrink', 'strDrinkThumb', 'strDrink', 'strCategory', 'strAlcoholic', 'countIngredients', 'dateModified'];
+  displayedColumns: string[] = ['idDrink', 'strDrinkThumb', 'strDrink', 'strCategory',
+                                'strAlcoholic', 'countIngredients', 'dateModified'];
   dataSource = new MatTableDataSource<Cocktail>([]);
 
   currentSearchMessage: string = '';
-  searchType: string = 'firstLetter';  // Por defecto
-  selectedLetter:string = 'A';
+  searchType: string = 'firstLetter';
+  selectedLetter: string = 'A';
+  selectedCategory: string = '';
   letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   categories: string [] = [];
 
   constructor(private cocktailService: CocktailService) { }
 
   ngOnInit(): void {
-    this.searchByFirstLetter('A');
+    this.searchByFirstLetter(this.selectedLetter);
     this.loadCategories();
   }
 
-  clearSearch() {
+  onSearchTypeChange(newType: string) {
+    this.searchType = newType;
     this.dataSource.data = [];
     this.currentSearchMessage = '';
+    
+    if(newType === 'firstLetter') {
+      this.searchByFirstLetter(this.selectedLetter);
+    } else if(newType === 'category' && this.categories.length > 0) {
+      this.searchByCategory(this.selectedCategory);
+    }
   }
 
   updateSearchMessage(type: 'firstLetter' | 'category' | 'cocktailName' | 'ingredient', value: string) {
@@ -95,6 +108,8 @@ export class HomeComponent implements OnInit {
   loadCategories() {
     this.cocktailService.getCategories().subscribe(res => {
       this.categories= res.drinks.map((c: any) => c.strCategory);
+      if(this.categories.length > 0 && !this.selectedCategory)
+        this.selectedCategory = this.categories[0];
     });
   }
 
@@ -107,6 +122,7 @@ export class HomeComponent implements OnInit {
   }
 
   searchByCategory(category: string) {
+    this.selectedCategory = category;
     this.cocktailService.getCocktailsByCategory(category).subscribe(res => {
       this.updateSearchMessage('category', category);
       this.processData(res);
@@ -114,6 +130,7 @@ export class HomeComponent implements OnInit {
   }
 
   searchByCocktailName(cocktailName: string) {
+    console.log("searchbycocktailname en homecomponent.ts")
     this.cocktailService.getCocktailsByCocktailName(cocktailName).subscribe(res => {
       this.updateSearchMessage('cocktailName', cocktailName);
       this.processData(res);
