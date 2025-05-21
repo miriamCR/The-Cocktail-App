@@ -6,9 +6,10 @@
       <mat-label>Search by</mat-label>
       <mat-select [(value)]="searchType" (selectionChange)="onSearchTypeChange($event.value)">
         <mat-option value="firstLetter">First Letter</mat-option>
-        <mat-option value="cocktailName">Cocktail Name</mat-option>
         <mat-option value="category">Category</mat-option>
         <mat-option value="ingredient">Ingredient</mat-option>
+        <mat-option value="alcoholicType">Alcoholic Type</mat-option>
+        <mat-option value="cocktailName">Cocktail Name</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -27,22 +28,28 @@
         </mat-select>
       </mat-form-field>
 
+      <!-- Ingredient: select -->
+      <mat-form-field *ngSwitchCase="'ingredient'" appearance="outline">
+        <mat-label>Ingredient</mat-label>
+        <mat-select [(value)]="selectedIngredient" (selectionChange)="searchByIngredient($event.value)">
+          <mat-option *ngFor="let ingr of ingredients" [value]="ingr">{{ ingr }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Alcoholic Type: select -->
+      <mat-form-field *ngSwitchCase="'alcoholicType'" appearance="outline">
+        <mat-label>Alcoholic Types</mat-label>
+        <mat-select [(value)]="selectedAlcoholicType" (selectionChange)="searchByAlcoholicType($event.value)">
+          <mat-option *ngFor="let alc of alcoholicTypes" [value]="alc">{{ alc }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <!-- Cocktail Name: text input -->
       <mat-form-field *ngSwitchCase="'cocktailName'">
         <mat-label>Cocktail Name</mat-label>
         <input matInput #nameInput (keyup.enter)="searchByCocktailName(nameInput.value)" placeholder="e.g. Margarita">
         <button mat-icon-button matSuffix (click)="searchByCocktailName(nameInput.value)" aria-label="Search by Cocktail Name"
                 matTooltip="Search by Cocktail Name">
-          <mat-icon>search</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <!-- Ingredient: text input -->
-      <mat-form-field *ngSwitchCase="'ingredient'">
-        <mat-label>Ingredient</mat-label>
-        <input matInput #ingredientInput (keyup.enter)="searchByIngredient(ingredientInput.value)" placeholder="e.g. vodka">
-        <button mat-icon-button matSuffix (click)="searchByIngredient(ingredientInput.value)" aria-label="Search by ingredient" 
-                matTooltip="Search by Ingredient">
           <mat-icon>search</mat-icon>
         </button>
       </mat-form-field>

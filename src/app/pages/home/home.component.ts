@@ -66,14 +66,20 @@ export class HomeComponent implements OnInit {
   searchType: string = 'firstLetter';
   selectedLetter: string = 'A';
   selectedCategory: string = '';
+  selectedIngredient: string = '';
+  selectedAlcoholicType: string = '';
   letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   categories: string [] = [];
+  ingredients: string [] = [];
+  alcoholicTypes: string [] = [];
 
   constructor(private cocktailService: CocktailService) { }
 
   ngOnInit(): void {
     this.searchByFirstLetter(this.selectedLetter);
-    this.loadCategories();
+    this.loadAllCategories();
+    this.loadAllIngredients();
+    this.loadAllAlcoholicTypes();
   }
 
   onSearchTypeChange(newType: string) {
@@ -85,10 +91,14 @@ export class HomeComponent implements OnInit {
       this.searchByFirstLetter(this.selectedLetter);
     } else if(newType === 'category' && this.categories.length > 0) {
       this.searchByCategory(this.selectedCategory);
+    } else if(newType === 'ingredient' && this.ingredients.length > 0) {
+      this.searchByIngredient(this.selectedIngredient);
+    } else if(newType === 'alcoholicType' && this.alcoholicTypes.length > 0) {
+      this.searchByAlcoholicType(this.selectedAlcoholicType);
     }
   }
 
-  updateSearchMessage(type: 'firstLetter' | 'category' | 'cocktailName' | 'ingredient', value: string) {
+  updateSearchMessage(type: 'firstLetter' | 'category' | 'ingredient' |'alcoholicType' | 'cocktailName', value: string) {
     switch(type) {
       case 'firstLetter':
         this.currentSearchMessage = `Showing cocktails starting by "${value}"`;
@@ -96,20 +106,47 @@ export class HomeComponent implements OnInit {
       case 'category':
         this.currentSearchMessage = `Showing cocktails from the category "${value}"`;
         break;
-      case 'cocktailName':
-        this.currentSearchMessage = `Showing results for cocktails containing "${value}" in the name`;
-        break;
       case 'ingredient':
         this.currentSearchMessage = `Showing cocktails containing the ingredient "${value}"`;
+        break;
+      case 'alcoholicType':
+        if (value === 'Alcoholic') {
+          this.currentSearchMessage = 'Showing alcoholic cocktails';
+        } else if (value === 'Non alcoholic') {
+          this.currentSearchMessage = 'Showing non-alcoholic cocktails';
+        } else if (value === 'Optional alcohol') {
+          this.currentSearchMessage = 'Showing cocktails with optional alcohol';
+        } else {
+          this.currentSearchMessage = `Showing cocktails (${value})`;
+        }
+        break;
+      case 'cocktailName':
+        this.currentSearchMessage = `Showing results for cocktails containing "${value}" in the name`;
         break;
     }
   }
   
-  loadCategories() {
-    this.cocktailService.getCategories().subscribe(res => {
+  loadAllCategories() {
+    this.cocktailService.getAllCategories().subscribe(res => {
       this.categories= res.drinks.map((c: any) => c.strCategory);
       if(this.categories.length > 0 && !this.selectedCategory)
         this.selectedCategory = this.categories[0];
+    });
+  }
+
+  loadAllIngredients() {
+    this.cocktailService.getAllIngredients().subscribe(res => {
+      this.ingredients= res.drinks.map((i: any) => i.strIngredient1);
+      if(this.ingredients.length > 0 && !this.selectedIngredient)
+        this.selectedIngredient = this.ingredients[0];
+    });
+  }
+
+  loadAllAlcoholicTypes() {
+    this.cocktailService.getAllAlcoholicTypes().subscribe(res => {
+      this.alcoholicTypes= res.drinks.map((alc: any) => alc.strAlcoholic);
+      if(this.alcoholicTypes.length > 0 && !this.selectedAlcoholicType)
+        this.selectedAlcoholicType = this.alcoholicTypes[0];
     });
   }
 
@@ -122,7 +159,6 @@ export class HomeComponent implements OnInit {
   }
 
   searchByCategory(category: string) {
-    this.selectedCategory = category;
     this.cocktailService.getCocktailsByCategory(category).subscribe(res => {
       this.updateSearchMessage('category', category);
       this.processData(res);
@@ -130,7 +166,6 @@ export class HomeComponent implements OnInit {
   }
 
   searchByCocktailName(cocktailName: string) {
-    console.log("searchbycocktailname en homecomponent.ts")
     this.cocktailService.getCocktailsByCocktailName(cocktailName).subscribe(res => {
       this.updateSearchMessage('cocktailName', cocktailName);
       this.processData(res);
@@ -144,9 +179,16 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  searchByAlcoholicType(alcoholicType: string) {
+    this.cocktailService.getCocktailsByAlcoholicType(alcoholicType).subscribe(res => {
+      this.updateSearchMessage('alcoholicType', alcoholicType);
+      this.processData(res);
+    });
+  }
+
   processData(res: any) {
-    if (!res.drinks) {
-    console.log("processdata NODRINKS de homecomponent.ts");
+    if (!res.drinks || res.drinks === 'no data found') {
+      console.log("processdata NODRINKS de homecomponent.ts");
       this.dataSource.data = [];
       return;
     }
