@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CocktailService } from '../../services/cocktail.service';
+import { RouterModule } from '@angular/router';
 
 export interface Ingredient {
   strIngredient: string;
@@ -52,7 +53,8 @@ function extractIngredients(cocktail: any): Ingredient[]{
     MatSelectModule,
     MatButtonModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
