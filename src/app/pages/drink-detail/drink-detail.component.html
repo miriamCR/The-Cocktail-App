@@ -1,1 +1,14 @@
-<p>drink-detail works!</p>
+<div *ngIf="drink">
+    <h1>{{ drink.strDrink }}</h1>
+    <img [src]="drink.strDrinkThumb" alt="{{ drink.strDrink }}" width="400" />
+    <p><strong>Category:</strong> {{ drink.strCategory }}</p>
+    <p><strong>Alcoholic:</strong> {{ drink.strAlcoholic }}</p>
+    <p><strong>Instructions:</strong> {{ drink.strInstructionsES || drink.strInstructions }}</p> <!-- ESP/ENG-->
+
+    <h3>Ingredients</h3>
+    <ul>
+        <li *ngFor="let ing of getIngredients(drink)">
+          {{ ing.ingredient }} - {{ ing.measure }}
+        </li>
+    </ul>
+</div>

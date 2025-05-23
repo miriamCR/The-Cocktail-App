@@ -209,4 +209,10 @@ export class HomeComponent implements OnInit {
     console.log('(funcionPROCESSDATA)Lista de cócteles con ingredientes:', processedCocktails);
   }
 
+  slugify(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/ /g, '-');
+  }
+
 }

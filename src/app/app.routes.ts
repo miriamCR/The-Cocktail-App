@@ -4,5 +4,5 @@ import { DrinkDetailComponent } from './pages/drink-detail/drink-detail.componen
 
 export const routes: Routes = [
     { path:'', component: HomeComponent }, // Ruta raiz
-    { path:'drink/:id', component: DrinkDetailComponent }, // Pagina de detalles de la bebida
+    { path:'drink/:id/:slug', component: DrinkDetailComponent }, // Pagina de detalles de la bebida
 ];
