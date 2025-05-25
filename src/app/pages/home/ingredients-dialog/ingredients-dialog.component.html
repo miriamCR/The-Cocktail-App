@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Ingredients</h2>
+
+<mat-dialog-content>
+    <div *ngFor="let ingredient of data">
+        <img [src]="getIngredientImage(ingredient.strIngredient)" alt="{{ingredient.strIngredient}}" />
+        <span class="ingredient-name">{{ ingredient.strIngredient }}</span>
+        <span *ngIf="ingredient.strMeasure" class="ingredient-measure"> - {{ ingredient.strMeasure }}</span>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -8,9 +8,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { CocktailService } from '../../services/cocktail.service';
 import { RouterModule } from '@angular/router';
+
+import { IngredientsDialogComponent } from './ingredients-dialog/ingredients-dialog.component';
 
 export interface Ingredient {
   strIngredient: string;
@@ -28,7 +32,7 @@ export interface Cocktail {
   dateModified?: string; // Opcional porque puede faltar 
 }
 
-//Funcion auxiliar para guardar los ingredientes(nombre y medida)
+//Funcion auxiliar para guardar los ingredients(name and measure)
 function extractIngredients(cocktail: any): Ingredient[]{
   const ingredients: Ingredient[] = [];
 
@@ -54,6 +58,7 @@ function extractIngredients(cocktail: any): Ingredient[]{
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
+    MatDialogModule,
     RouterModule
   ],
   templateUrl: './home.component.html',
@@ -75,7 +80,7 @@ export class HomeComponent implements OnInit {
   ingredients: string [] = [];
   alcoholicTypes: string [] = [];
 
-  constructor(private cocktailService: CocktailService) { }
+  constructor(private cocktailService: CocktailService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.searchByFirstLetter(this.selectedLetter);
@@ -215,4 +220,9 @@ export class HomeComponent implements OnInit {
       .replace(/ /g, '-');
   }
 
+  openIngredientsModal(element: Cocktail): void {
+    this.dialog.open(IngredientsDialogComponent, {
+      data: element.ingredients, // Array (name and measure - without image)
+    });
+  }
 }
