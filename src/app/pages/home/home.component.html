@@ -128,10 +128,17 @@
       <!-- Row shown when no data -->
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" colspan="7">
-          No data
+          No data found. Try a different search.
         </td>
       </tr>
     </table>
+
+    <div class="table-footer">
+      <span><strong>Total Drinks:</strong> {{ totalCount }}</span>
+      <span><strong>Alcoholic:</strong> {{ alcoholicCount }}</span>
+      <span><strong>Non Alcoholic:</strong> {{ nonAlcoholicCount }}</span>
+      <span><strong>Optional Alcohol:</strong> {{ optionalAlcoholCount }}</span>
+    </div>
 
   </div>
 </main>

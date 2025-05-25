@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MatCardModule} from '@angular/material/card';
 import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -59,6 +60,7 @@ function extractIngredients(cocktail: any): Ingredient[]{
     MatTooltipModule,
     MatIconModule,
     MatDialogModule,
+    MatCardModule,
     RouterModule
   ],
   templateUrl: './home.component.html',
@@ -79,6 +81,12 @@ export class HomeComponent implements OnInit {
   categories: string [] = [];
   ingredients: string [] = [];
   alcoholicTypes: string [] = [];
+
+  // Drinks Count
+  totalCount: number = 0;
+  alcoholicCount: number = 0;
+  nonAlcoholicCount: number = 0;
+  optionalAlcoholCount: number = 0;
 
   constructor(private cocktailService: CocktailService, private dialog: MatDialog) { }
 
@@ -194,14 +202,28 @@ export class HomeComponent implements OnInit {
   }
 
   processData(res: any) {
+    this.totalCount = 0;
+    this.alcoholicCount = 0;
+    this.nonAlcoholicCount = 0;
+    this.optionalAlcoholCount = 0;
+
     if (!res.drinks || res.drinks === 'no data found') {
       console.log("processdata NODRINKS de homecomponent.ts");
       this.dataSource.data = [];
       return;
     }
 
-    // Algunos endpoints solo devuelven id, nombre y thumb, otros más datos. Si no viene con ingredientes, no se pueden mostrar countIngredients correctamente
     const processedCocktails = res.drinks.map((cocktail: any) => {
+      this.totalCount++;
+      if(cocktail.strAlcoholic === 'Alcoholic') {
+        this.alcoholicCount++;
+      } else if(cocktail.strAlcoholic === 'Non alcoholic') {
+        this.nonAlcoholicCount++;
+      } else if(cocktail.strAlcoholic === 'Optional alcohol') {
+        this.optionalAlcoholCount++;
+      }
+      
+    // Algunos endpoints solo devuelven id, nombre y thumb, otros más datos. Si no viene con ingredientes, no se pueden mostrar countIngredients correctamente
       const ingredients = extractIngredients(cocktail);
       return {
         ...cocktail, // Operador spread, copia todos los campos de cocktail
