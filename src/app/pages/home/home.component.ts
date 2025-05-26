@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
+import { RouterLink } from '@angular/router';
 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -13,9 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { CocktailService } from '../../services/cocktail.service';
-import { RouterModule } from '@angular/router';
-
 import { IngredientsDialogComponent } from './ingredients-dialog/ingredients-dialog.component';
+import { slugify } from '../../utils/utils';
 
 export interface Ingredient {
   strIngredient: string;
@@ -61,7 +61,7 @@ function extractIngredients(cocktail: any): Ingredient[]{
     MatIconModule,
     MatDialogModule,
     MatCardModule,
-    RouterModule
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -143,7 +143,9 @@ export class HomeComponent implements OnInit {
   
   loadAllCategories() {
     this.cocktailService.getAllCategories().subscribe(res => {
-      this.categories= res.drinks.map((c: any) => c.strCategory);
+      this.categories= res.drinks.map((c: any) => c.strCategory)
+                                 .sort((a: string, b: string) => a.localeCompare(b));
+
       if(this.categories.length > 0 && !this.selectedCategory)
         this.selectedCategory = this.categories[0];
     });
@@ -151,7 +153,9 @@ export class HomeComponent implements OnInit {
 
   loadAllIngredients() {
     this.cocktailService.getAllIngredients().subscribe(res => {
-      this.ingredients= res.drinks.map((i: any) => i.strIngredient1);
+      this.ingredients= res.drinks.map((i: any) => i.strIngredient1)
+                                  .sort((a: string, b: string) => a.localeCompare(b));
+
       if(this.ingredients.length > 0 && !this.selectedIngredient)
         this.selectedIngredient = this.ingredients[0];
     });
@@ -159,7 +163,9 @@ export class HomeComponent implements OnInit {
 
   loadAllAlcoholicTypes() {
     this.cocktailService.getAllAlcoholicTypes().subscribe(res => {
-      this.alcoholicTypes= res.drinks.map((alc: any) => alc.strAlcoholic);
+      this.alcoholicTypes= res.drinks.map((alc: any) => alc.strAlcoholic)
+                                     .sort((a: string, b: string) => a.localeCompare(b));
+
       if(this.alcoholicTypes.length > 0 && !this.selectedAlcoholicType)
         this.selectedAlcoholicType = this.alcoholicTypes[0];
     });
@@ -232,16 +238,16 @@ export class HomeComponent implements OnInit {
       };
     });
 
+    // Sort table data
+    processedCocktails.sort((a: Cocktail, b: Cocktail) => a.strDrink.localeCompare(b.strDrink));
     this.dataSource.data = processedCocktails;
     console.log('(funcionPROCESSDATA)Lista de cócteles con ingredientes:', processedCocktails);
   }
 
-  slugify(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/ /g, '-');
+  getSlug(name: string): string {
+    return slugify(name);
   }
-
+  
   openIngredientsModal(element: Cocktail): void {
     this.dialog.open(IngredientsDialogComponent, {
       data: element.ingredients, // Array (name and measure - without image)

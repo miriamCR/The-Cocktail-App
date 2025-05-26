@@ -55,90 +55,93 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="currentSearchMessage" class="search-info-message">
+    <div *ngIf="currentSearchMessage" class="search-info-message" style="margin-top: 7px;">
       {{ currentSearchMessage }}
     </div>
-
+    
     <!----------------------------------------------------------TABLE------------------------------------------------------>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!-- ID Column -->
-      <ng-container matColumnDef="idDrink">
-        <th mat-header-cell *matHeaderCellDef> Id </th>
-        <td mat-cell *matCellDef="let element"> 
-          <a [routerLink]="['/drink', element.idDrink, slugify(element.strDrink)]">
-            {{element.idDrink}}
-          </a>
-        </td>
-      </ng-container>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- ID Column -->
+        <ng-container matColumnDef="idDrink">
+          <th mat-header-cell *matHeaderCellDef> Id </th>
+          <td mat-cell *matCellDef="let element"> 
+            <a [routerLink]="['/drink', element.idDrink, getSlug(element.strDrink)]">
+              {{element.idDrink}}
+            </a>
+          </td>
+        </ng-container>
 
-      <!-- Image Column -->
-      <ng-container matColumnDef="strDrinkThumb">
-        <th mat-header-cell *matHeaderCellDef> Image </th>
-        <td mat-cell *matCellDef="let element">
-          <img [src]="element.strDrinkThumb" alt="{{element.strDrink}}" width="100">
-        </td>
-      </ng-container>
+        <!-- Image Column -->
+        <ng-container matColumnDef="strDrinkThumb">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let element">
+            <img [src]="element.strDrinkThumb" alt="{{element.strDrink}}" width="100">
+          </td>
+        </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="strDrink">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.strDrink}}
-        </td>
-      </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="strDrink">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.strDrink}}
+          </td>
+        </ng-container>
 
-      <!-- Category Column -->
-      <ng-container matColumnDef="strCategory">
-        <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.strCategory}}
-        </td>
-      </ng-container>
+        <!-- Category Column -->
+        <ng-container matColumnDef="strCategory">
+          <th mat-header-cell *matHeaderCellDef> Category </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.strCategory}}
+          </td>
+        </ng-container>
 
-      <!-- IsAlcoholic Column -->
-      <ng-container matColumnDef="strAlcoholic">
-        <th mat-header-cell *matHeaderCellDef> Is  Alcoholic </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.strAlcoholic}}
-        </td>
-      </ng-container>
+        <!-- IsAlcoholic Column -->
+        <ng-container matColumnDef="strAlcoholic">
+          <th mat-header-cell *matHeaderCellDef> Is  Alcoholic </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.strAlcoholic}}
+          </td>
+        </ng-container>
 
-      <!-- CountIngredients Column -->
-      <ng-container matColumnDef="countIngredients">
-        <th mat-header-cell *matHeaderCellDef> Count Ingredients </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.countIngredients}}
-          <button mat-icon-button (click)="openIngredientsModal(element)" matTooltip="View Ingredients" >
-            <mat-icon>visibility</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <!-- CountIngredients Column -->
+        <ng-container matColumnDef="countIngredients">
+          <th mat-header-cell *matHeaderCellDef> Count Ingredients </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.countIngredients}}
+            <button mat-icon-button (click)="openIngredientsModal(element)" matTooltip="View Ingredients" >
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <!-- DateModified Column -->
-      <ng-container matColumnDef="dateModified">
-        <th mat-header-cell *matHeaderCellDef> Date Modified </th>
-        <td mat-cell *matCellDef="let element">
-          {{element.dateModified}}
-        </td>
-      </ng-container>
-      
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- DateModified Column -->
+        <ng-container matColumnDef="dateModified">
+          <th mat-header-cell *matHeaderCellDef> Date Modified </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.dateModified}}
+          </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-      <!-- Row shown when no data -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="7">
-          No data found. Try a different search.
-        </td>
-      </tr>
-    </table>
-
-    <div class="table-footer">
-      <span><strong>Total Drinks:</strong> {{ totalCount }}</span>
-      <span><strong>Alcoholic:</strong> {{ alcoholicCount }}</span>
-      <span><strong>Non Alcoholic:</strong> {{ nonAlcoholicCount }}</span>
-      <span><strong>Optional Alcohol:</strong> {{ optionalAlcoholCount }}</span>
+        <!-- Row shown when no data -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="7">
+            No data found. Try a different search.
+          </td>
+        </tr>
+      </table>
     </div>
 
+    <!-------------------------------------------------------TABLE-FOOTER------------------------------------------------------>
+    <div class="drink-counts">
+      <span class="count total"><span class="title">Total:</span> {{ totalCount }}</span>
+      <span class="count alcoholic"><span class="title">Alcoholic:</span> {{ alcoholicCount }}</span>
+      <span class="count non-alcoholic"><span class="title">Non alcoholic:</span> {{ nonAlcoholicCount }}</span>
+      <span class="count optional-alcohol"><span class="title">Optional alcohol:</span> {{ optionalAlcoholCount }}</span>
+    </div>
+    
   </div>
 </main>

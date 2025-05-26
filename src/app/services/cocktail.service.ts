@@ -47,4 +47,8 @@ export class CocktailService {
   getFullCocktailDetails(cocktailId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/lookup.php?i=${cocktailId}`);
   }
+
+  getRandomCocktail(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/random.php`);
+  }
 }

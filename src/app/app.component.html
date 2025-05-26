@@ -1,9 +1,8 @@
-<mat-toolbar>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
+<mat-toolbar class="toolbar-custom">
+  <span class="toolbar-title">{{ title }}</span>
+  <button mat-raised-button class="random-button" (click)="showRandomCocktail()">
+    Random Drink
   </button>
-  <span> My Application - {{ title }}</span>
-  <mat-icon>favorite</mat-icon>
 </mat-toolbar>
 
 <router-outlet />
