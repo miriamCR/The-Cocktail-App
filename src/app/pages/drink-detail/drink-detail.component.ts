@@ -17,8 +17,8 @@ export class DrinkDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if(id){
-      this.cocktailService.getFullCocktailDetails(id).subscribe((res) => {
+    if (id) {
+      this.cocktailService.getFullCocktailDetailsById(id).subscribe((res) => {
         this.drink = res.drinks[0];
       });
     }

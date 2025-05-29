@@ -1,5 +1,11 @@
 <main class="main">
-    <h1>Welcome to The Cocktail App 🎉</h1>
+  <h1>Welcome to The Cocktail App 🎉</h1>
+  <div class="alcohol-buttons">
+    <button *ngFor="let alcoholicType of alcoholicTypes" (click)="goToAlcoholType(alcoholicType)">
+      {{ alcoholicType }}
+    </button>
+  </div>
+
   <div class="content">
     <h1>Cocktails</h1>
     <mat-form-field appearance="outline">
@@ -8,7 +14,6 @@
         <mat-option value="firstLetter">First Letter</mat-option>
         <mat-option value="category">Category</mat-option>
         <mat-option value="ingredient">Ingredient</mat-option>
-        <mat-option value="alcoholicType">Alcoholic Type</mat-option>
         <mat-option value="cocktailName">Cocktail Name</mat-option>
       </mat-select>
     </mat-form-field>
@@ -33,14 +38,6 @@
         <mat-label>Ingredient</mat-label>
         <mat-select [(value)]="selectedIngredient" (selectionChange)="searchByIngredient($event.value)">
           <mat-option *ngFor="let ingr of ingredients" [value]="ingr">{{ ingr }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <!-- Alcoholic Type: select -->
-      <mat-form-field *ngSwitchCase="'alcoholicType'" appearance="outline">
-        <mat-label>Alcoholic Types</mat-label>
-        <mat-select [(value)]="selectedAlcoholicType" (selectionChange)="searchByAlcoholicType($event.value)">
-          <mat-option *ngFor="let alc of alcoholicTypes" [value]="alc">{{ alc }}</mat-option>
         </mat-select>
       </mat-form-field>
 

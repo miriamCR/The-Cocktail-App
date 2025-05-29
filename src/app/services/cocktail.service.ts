@@ -44,7 +44,7 @@ export class CocktailService {
     return this.http.get(`${this.apiUrl}/filter.php?a=${alcoholicType}`);
   }
 
-  getFullCocktailDetails(cocktailId: string): Observable<any> {
+  getFullCocktailDetailsById(cocktailId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/lookup.php?i=${cocktailId}`);
   }
 

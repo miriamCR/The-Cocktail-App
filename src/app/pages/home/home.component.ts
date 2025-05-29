@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CocktailService } from '../../services/cocktail.service';
 import { IngredientsDialogComponent } from './ingredients-dialog/ingredients-dialog.component';
 import { slugify } from '../../utils/utils';
+import { catchError, forkJoin, of } from 'rxjs';
 
 export interface Ingredient {
   strIngredient: string;
@@ -76,7 +77,6 @@ export class HomeComponent implements OnInit {
   selectedLetter: string = 'A';
   selectedCategory: string = '';
   selectedIngredient: string = '';
-  selectedAlcoholicType: string = '';
   letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   categories: string [] = [];
   ingredients: string [] = [];
@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
   nonAlcoholicCount: number = 0;
   optionalAlcoholCount: number = 0;
 
-  constructor(private cocktailService: CocktailService, private dialog: MatDialog) { }
+  constructor(private cocktailService: CocktailService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.searchByFirstLetter(this.selectedLetter);
@@ -108,8 +108,6 @@ export class HomeComponent implements OnInit {
       this.searchByCategory(this.selectedCategory);
     } else if(newType === 'ingredient' && this.ingredients.length > 0) {
       this.searchByIngredient(this.selectedIngredient);
-    } else if(newType === 'alcoholicType' && this.alcoholicTypes.length > 0) {
-      this.searchByAlcoholicType(this.selectedAlcoholicType);
     }
   }
 
@@ -143,7 +141,7 @@ export class HomeComponent implements OnInit {
   
   loadAllCategories() {
     this.cocktailService.getAllCategories().subscribe(res => {
-      this.categories= res.drinks.map((c: any) => c.strCategory)
+      this.categories = res.drinks.map((c: any) => c.strCategory)
                                  .sort((a: string, b: string) => a.localeCompare(b));
 
       if(this.categories.length > 0 && !this.selectedCategory)
@@ -153,7 +151,7 @@ export class HomeComponent implements OnInit {
 
   loadAllIngredients() {
     this.cocktailService.getAllIngredients().subscribe(res => {
-      this.ingredients= res.drinks.map((i: any) => i.strIngredient1)
+      this.ingredients = res.drinks.map((i: any) => i.strIngredient1)
                                   .sort((a: string, b: string) => a.localeCompare(b));
 
       if(this.ingredients.length > 0 && !this.selectedIngredient)
@@ -163,11 +161,8 @@ export class HomeComponent implements OnInit {
 
   loadAllAlcoholicTypes() {
     this.cocktailService.getAllAlcoholicTypes().subscribe(res => {
-      this.alcoholicTypes= res.drinks.map((alc: any) => alc.strAlcoholic)
+      this.alcoholicTypes = res.drinks.map((alc: any) => alc.strAlcoholic)
                                      .sort((a: string, b: string) => a.localeCompare(b));
-
-      if(this.alcoholicTypes.length > 0 && !this.selectedAlcoholicType)
-        this.selectedAlcoholicType = this.alcoholicTypes[0];
     });
   }
 
@@ -181,28 +176,51 @@ export class HomeComponent implements OnInit {
 
   searchByCategory(category: string) {
     this.cocktailService.getCocktailsByCategory(category).subscribe(res => {
-      this.updateSearchMessage('category', category);
-      this.processData(res);
+      const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
+      const requests = ids.map((id: string) =>
+        this.cocktailService.getFullCocktailDetailsById(id).pipe(
+          catchError(err => {
+            console.error(`Error al obtener el coctel con id${id}:`, err);
+            return of(null);
+          })
+        )
+      );
+
+      forkJoin(requests).subscribe((results: any) => {
+        console.log('Resultados de la API (category):', results); // Raw results from API
+        console.log('Resultados aplanados:', { drinks: results.map( (r: any) => r.drinks).flat() }); // Results
+
+        this.updateSearchMessage('category', category);
+        this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+      });
+    });
+  }
+
+  searchByIngredient(ingredient: string) {
+    this.cocktailService.getCocktailsByIngredient(ingredient).subscribe(res => {
+      const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
+      const requests = ids.map((id: string) =>
+        this.cocktailService.getFullCocktailDetailsById(id).pipe(
+          catchError(err => {
+            console.error(`Error al obtener el coctel con id${id}:`, err);
+            return of(null);
+          })
+        )
+      );
+
+      forkJoin(requests).subscribe((results: any) => {
+        console.log('Resultados de la API (ingredient):', results);
+        console.log('Resultados aplanados:', { drinks: results.map( (r: any) => r.drinks).flat() });
+
+        this.updateSearchMessage('ingredient', ingredient);
+        this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+      });
     });
   }
 
   searchByCocktailName(cocktailName: string) {
     this.cocktailService.getCocktailsByCocktailName(cocktailName).subscribe(res => {
       this.updateSearchMessage('cocktailName', cocktailName);
-      this.processData(res);
-    });
-  }
-
-  searchByIngredient(ingredient: string) {
-    this.cocktailService.getCocktailsByIngredient(ingredient).subscribe(res => {
-      this.updateSearchMessage('ingredient', ingredient);
-      this.processData(res);
-    });
-  }
-
-  searchByAlcoholicType(alcoholicType: string) {
-    this.cocktailService.getCocktailsByAlcoholicType(alcoholicType).subscribe(res => {
-      this.updateSearchMessage('alcoholicType', alcoholicType);
       this.processData(res);
     });
   }
@@ -253,4 +271,9 @@ export class HomeComponent implements OnInit {
       data: element.ingredients, // Array (name and measure - without image)
     });
   }
+  
+  goToAlcoholType(type: string) {
+    this.router.navigate(['/alcohol-type', type]);
+  }
+
 }
