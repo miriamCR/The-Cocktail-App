@@ -1,9 +1,15 @@
 <main class="main">
-  <h1>Welcome to The Cocktail App 🎉</h1>
-  <div class="alcohol-buttons">
-    <button *ngFor="let alcoholicType of alcoholicTypes" (click)="goToAlcoholType(alcoholicType)">
-      {{ alcoholicType }}
-    </button>
+  <h1 class="main-title">Welcome to The Cocktail App 🎉</h1>
+
+  <div class="alcohol-card-container">
+    <mat-card class="alcohol-card" *ngFor="let alcoholicType of alcoholicTypes" (click)="goToAlcoholType(alcoholicType)">
+      <mat-card-content>
+        <div class="card-content">
+          <span>{{ alcoholicType }}</span>
+          <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <div class="content">

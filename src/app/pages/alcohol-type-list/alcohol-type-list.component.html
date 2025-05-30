@@ -1,16 +1,22 @@
-<h2>Cocktails - Type {{ alcoholicType }}</h2>
+<h2 class="main-title">{{ alcoholicType }} Cocktails</h2>
 
-<div *ngIf="cocktails.length > 0; else noResults">
-  <div class="cocktail-grid">
-    <mat-card *ngFor="let cocktail of cocktails" class="cocktail-card">
-      <img mat-card-image [src]="cocktail.strDrinkThumb" alt="{{ cocktail.strDrink }}">
-      <mat-card-title>{{ cocktail.strDrink }}</mat-card-title>
-      <mat-card-actions>
-        <a [routerLink]="['/drink', cocktail.idDrink]">
-          <button mat-button color="primary">Ver detalles</button>
-        </a>
-      </mat-card-actions>
-    </mat-card>
+<div *ngIf="loading" class="loading-spinner">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <div *ngIf="cocktails.length > 0; else noResults">
+    <div class="cocktail-grid">
+      <mat-card *ngFor="let cocktail of cocktails" class="cocktail-card">
+        <img mat-card-image [src]="cocktail.strDrinkThumb" alt="{{ cocktail.strDrink }}">
+        <mat-card-title>{{ cocktail.strDrink }}</mat-card-title>
+        <mat-card-actions>
+          <a [routerLink]="['/drink', cocktail.idDrink, getSlug(cocktail.strDrink)]">
+            <button mat-button color="primary">Ver detalles</button>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
 </div>
 

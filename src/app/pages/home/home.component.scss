@@ -1,3 +1,9 @@
+.main-title {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 2.2rem;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -66,16 +72,40 @@
   color: #333;
 }
 
-.alcohol-buttons {
+.alcohol-card-container {
   display: flex;
+  justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+  padding: 0 1rem;
 }
-.alcohol-buttons button {
-  background-color: #f2f2f2;
-  border: none;
-  padding: 8px 16px;
+
+.alcohol-card {
   cursor: pointer;
-  border-radius: 8px;
-  font-weight: bold;
+  padding: 0.5rem;
+  min-width: 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-left: 5px solid #1976d2;
+  transition: transform 0.2s;
+}
+
+.alcohol-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow-icon {
+  font-size: 1.2rem;
+  color: #888;
+  margin-left: 9px;
 }
