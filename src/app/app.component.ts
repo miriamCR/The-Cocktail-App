@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { slugify } from './utils/utils';
 @Component({
   selector: 'app-root',
   standalone: true, 
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule],
+  imports: [RouterOutlet, RouterLink, MatToolbarModule, MatButtonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

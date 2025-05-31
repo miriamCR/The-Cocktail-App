@@ -1,0 +1,32 @@
+<h2 class="main-title">{{ categoryName }}</h2>
+
+<div *ngIf="loading" class="loading-spinner">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<div *ngIf="!loading">
+    <div *ngIf="cocktails.length > 0; else noResults">
+        <div class="slider-container">
+            <button mat-icon-button (click)="scrollLeft()">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+
+            <div #slider class="slider" (wheel)="onWheel($event)">
+                <a *ngFor="let cocktail of cocktails" [routerLink]="['/drink', cocktail.idDrink, getSlug(cocktail.strDrink)]" class="cocktail-link">
+                    <mat-card class="cocktail-card">
+                        <img mat-card-image [src]="cocktail.strDrinkThumb" alt="{{ cocktail.strDrink }}">
+                        <mat-card-title>{{ cocktail.strDrink }}</mat-card-title>
+                    </mat-card>
+                </a>
+            </div>
+            
+            <button mat-icon-button (click)="scrollRight()">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template #noResults>
+    <p>No se encontraron cócteles para esta categoría.</p>
+</ng-template>

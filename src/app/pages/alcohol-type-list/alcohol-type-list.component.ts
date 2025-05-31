@@ -19,8 +19,8 @@ import { slugify } from '../../utils/utils';
   styleUrls: ['./alcohol-type-list.component.scss']
 })
 export class AlcoholTypeListComponent implements OnInit {
-  cocktails: Cocktail[] = [];
   alcoholicType: string = '';
+  cocktails: Cocktail[] = [];
   loading: boolean = true;
 
   constructor(private route: ActivatedRoute, private cocktailService: CocktailService) {}

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
 import { ActivatedRoute} from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { CocktailService } from '../../services/cocktail.service';
 
 @Component({
   selector: 'app-drink-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule],
   templateUrl: './drink-detail.component.html',
   styleUrl: './drink-detail.component.scss'
 })
