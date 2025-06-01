@@ -1,19 +1,37 @@
 <div *ngIf="drink">
-    <h1>{{ drink.strDrink }}</h1>
-    <img [src]="drink.strDrinkThumb" alt="{{ drink.strDrink }}" width="400" />
-    <p><strong>Category:</strong>{{ drink.strCategory }}
-      <button mat-button color="primary" [routerLink]="['/category', drink.strCategory]" style="margin-left: 10px;">
-        Ver más
-        <mat-icon>arrow_forward</mat-icon>
+  <h1>{{ drink.strDrink }}</h1>
+  <img [src]="drink.strDrinkThumb" alt="{{ drink.strDrink }}" width="400" />
+
+  <p><strong>Category:</strong>{{ drink.strCategory }}
+    <button mat-button color="primary" [routerLink]="['/category', drink.strCategory]" style="margin-left: 10px;">
+      See More drinks
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </p>
+
+  <p><strong>Alcoholic:</strong> {{ drink.strAlcoholic }}</p>
+
+  <p class="instructions-languages">
+    <strong>Instructions:</strong>
+    
+    <span class="flags-container">
+      <button mat-icon-button class="flag-button"
+              *ngFor="let lang of availableLanguages"
+              (click)="changeLanguage(lang)"
+              [class.selected]="selectedLanguage === lang"
+              [attr.aria-label]="'Change instructions language to ' + lang"
+              [matTooltip]=lang 
+              matTooltipShowDelay="100">
+        <img [src]="'assets/flags/' + lang.toLowerCase() + '.png'" [alt]="lang + ' flag'" width="40" height="40" />
       </button>
-    </p>
-    <p><strong>Alcoholic:</strong> {{ drink.strAlcoholic }}</p>
-    <p><strong>Instructions:</strong> {{ drink.strInstructionsES || drink.strInstructions }}</p> <!-- ESP/ENG-->
-<img src="assets/flags/es.png" alt="Spanish flag" width="50" height="50" />
-    <h3>Ingredients</h3>
-    <ul>
-        <li *ngFor="let ing of getIngredients(drink)">
-          {{ ing.ingredient }} - {{ ing.measure }}
-        </li>
-    </ul>
+    </span>
+  </p>
+  <p>{{ getInstructionsByLanguage(selectedLanguage) }}</p>
+
+  <h3>Ingredients</h3>
+  <ul>
+    <li *ngFor="let ing of getIngredients(drink)">
+      {{ ing.ingredient }} - {{ ing.measure }}
+    </li>
+  </ul>
 </div>

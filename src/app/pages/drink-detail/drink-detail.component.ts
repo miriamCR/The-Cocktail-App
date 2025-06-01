@@ -3,18 +3,22 @@ import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngS
 import { ActivatedRoute} from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { CocktailService } from '../../services/cocktail.service';
 
 @Component({
   selector: 'app-drink-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule],
+  imports: [CommonModule, RouterLink, MatIconModule, MatButtonModule, MatTooltipModule],
   templateUrl: './drink-detail.component.html',
   styleUrl: './drink-detail.component.scss'
 })
 export class DrinkDetailComponent implements OnInit {
   drink: any;
+  selectedLanguage: string = 'EN';
+  availableLanguages: string[] = [];
 
   constructor(private route: ActivatedRoute, private cocktailService: CocktailService) {}
 
@@ -23,6 +27,7 @@ export class DrinkDetailComponent implements OnInit {
     if (id) {
       this.cocktailService.getFullCocktailDetailsById(id).subscribe((res) => {
         this.drink = res.drinks[0];
+        this.availableLanguages = this.getAvailableLanguages(this.drink);
       });
     }
   }
@@ -37,5 +42,27 @@ export class DrinkDetailComponent implements OnInit {
       }
     }
     return ingredients;
+  }
+
+  getAvailableLanguages(drink: any): string[] {
+    return ['EN', 'ES', 'DE', 'FR', 'IT'].filter(language => {
+      if (language === 'EN')
+        return drink['strInstructions'];
+      else
+        return drink[`strInstructions${language}`];
+    });
+  }
+
+  getInstructionsByLanguage(language: string): string {
+    if (!this.drink) return '';
+
+    if (language === 'EN')
+      return this.drink.strInstructions;
+    else
+      return this.drink[`strInstructions${language}`] || 'No instructions available';
+  }
+
+  changeLanguage(language: string): void {
+    this.selectedLanguage = language;
   }
 }
