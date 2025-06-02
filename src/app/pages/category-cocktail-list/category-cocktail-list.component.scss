@@ -7,10 +7,11 @@
 .slider-container {
     display: flex;
     align-items: center;
-    gap: 1rem;              // separar los botones del slider
-    max-width: 1900px;
-    margin: 2rem auto;
+    max-width: 1550px;
     height: 100%;
+    gap: 1rem;              // separar los botones del slider
+    margin: 2rem auto;
+    padding: 0 2rem;  
 }
 
 .slider {

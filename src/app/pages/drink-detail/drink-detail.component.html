@@ -1,37 +1,46 @@
-<div *ngIf="drink">
-  <h1>{{ drink.strDrink }}</h1>
-  <img [src]="drink.strDrinkThumb" alt="{{ drink.strDrink }}" width="400" />
+<div *ngIf="drink" class="drink-details-container">
+  <h1 style="margin-top: 0px;margin-bottom: 24px;">{{ drink.strDrink }}</h1>
+  <img [src]="drink.strDrinkThumb" alt="{{ drink.strDrink }}" width="350" style=" box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);"/>
 
-  <p><strong>Category:</strong>{{ drink.strCategory }}
-    <button mat-button color="primary" [routerLink]="['/category', drink.strCategory]" style="margin-left: 10px;">
-      See More drinks
-      <mat-icon>arrow_forward</mat-icon>
-    </button>
-  </p>
-
-  <p><strong>Alcoholic:</strong> {{ drink.strAlcoholic }}</p>
-
-  <p class="instructions-languages">
-    <strong>Instructions:</strong>
-    
-    <span class="flags-container">
-      <button mat-icon-button class="flag-button"
-              *ngFor="let lang of availableLanguages"
-              (click)="changeLanguage(lang)"
-              [class.selected]="selectedLanguage === lang"
-              [attr.aria-label]="'Change instructions language to ' + lang"
-              [matTooltip]=lang 
-              matTooltipShowDelay="100">
-        <img [src]="'assets/flags/' + lang.toLowerCase() + '.png'" [alt]="lang + ' flag'" width="40" height="40" />
+  <div class="category-alcoholic-container">
+    <div class="category-line">
+      <span><strong>Category:</strong>{{ drink.strCategory }}</span>
+      <button mat-icon-button [routerLink]="['/category', drink.strCategory]" 
+              aria-label="More Drinks In This Category" 
+              matTooltip="More Drinks In This Category">
+        <mat-icon>arrow_forward</mat-icon>
       </button>
-    </span>
-  </p>
-  <p>{{ getInstructionsByLanguage(selectedLanguage) }}</p>
+    </div>
+    
+    <p class="alcoholic-line"><strong>Alcoholic:</strong>{{ drink.strAlcoholic }}</p>
+  </div>
 
-  <h3>Ingredients</h3>
-  <ul>
-    <li *ngFor="let ing of getIngredients(drink)">
-      {{ ing.ingredient }} - {{ ing.measure }}
-    </li>
-  </ul>
+  <section class="instructions-container">
+    <div class="instructions-header">
+      <strong>Instructions</strong>
+      <span class="flags-container">
+        <button mat-icon-button class="flag-button"
+                *ngFor="let lang of availableLanguages"
+                (click)="changeLanguage(lang)"
+                [class.selected]="selectedLanguage === lang"
+                [attr.aria-label]="'Change instructions language to ' + lang"
+                [matTooltip]=lang 
+                matTooltipShowDelay="420">
+          <img [src]="'assets/flags/' + lang.toLowerCase() + '.png'" [alt]="lang + ' flag'" width="40" height="40" />
+        </button>
+      </span>
+    </div>
+    <p class="instructions-text">{{ getInstructionsByLanguage(selectedLanguage) }}</p>
+  </section>
+ 
+
+  <section class="ingredients-container">
+    <strong>Ingredients</strong>
+    <ul class="ingredients-list">
+      <li *ngFor="let ing of getIngredients(drink)">
+        <span class="ingredient-name">{{ ing.ingredient }}</span>
+        <span *ngIf="ing.measure"> - {{ ing.measure }}</span>
+      </li>
+    </ul>
+  </section>
 </div>

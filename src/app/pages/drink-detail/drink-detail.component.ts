@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
 import { ActivatedRoute} from '@angular/router';
 import { RouterLink } from '@angular/router';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { CocktailService } from '../../services/cocktail.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-drink-detail',
@@ -22,14 +24,24 @@ export class DrinkDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private cocktailService: CocktailService) {}
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.cocktailService.getFullCocktailDetailsById(id).subscribe((res) => {
-        this.drink = res.drinks[0];
-        this.availableLanguages = this.getAvailableLanguages(this.drink);
+  ngOnInit(): void { // Listen for route changes
+    this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          const id = params.get('id');
+          if (id) {
+            return this.cocktailService.getFullCocktailDetailsById(id);
+          }
+          return [];
+        })
+      )
+      .subscribe((res: any) => {
+        if (res && res.drinks && res.drinks.length > 0) {
+          this.drink = res.drinks[0];
+          this.availableLanguages = this.getAvailableLanguages(this.drink);
+          this.selectedLanguage = 'EN';
+        }
       });
-    }
   }
 
   getIngredients(drink: any): any[] {

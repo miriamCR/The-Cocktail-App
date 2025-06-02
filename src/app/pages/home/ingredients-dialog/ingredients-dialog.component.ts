@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+
 import { Ingredient } from '../home.component';
 
 @Component({
@@ -16,6 +17,6 @@ export class IngredientsDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Ingredient[], private dialogRef: MatDialogRef<IngredientsDialogComponent>) {}
 
   getIngredientImage(nameIngredient: string): string {
-    return `https://www.thecocktaildb.com/images/ingredients/${nameIngredient}-small.png`;
+    return `https://www.thecocktaildb.com/images/ingredients/${nameIngredient}-medium.png`;
   }
 }

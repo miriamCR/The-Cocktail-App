@@ -1,7 +1,57 @@
-.instructions-languages {
+.drink-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    background-color: #3ce5ff34;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.category-alcoholic-container {
+    margin-top: 24px;
+
+    .category-line {
+        display: flex;
+        align-items: center;
+    }
+
+    .alcoholic-line {
+        margin: 0;
+    }
+
+    strong {
+        margin-right: 7px;
+        font-size: 1.1rem;
+  }
+}
+
+.instructions-container,
+.ingredients-container {
+    box-sizing: border-box;
+    width: 100%;
+    background: #f9faff;
+    border: 1px solid #a9d1ff;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 24px;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.1);
+}
+
+.instructions-container .instructions-header strong,
+.ingredients-container strong  {
+    font-size: 1.1rem;
+}
+
+.instructions-header {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.instructions-text {
+    line-height: 1.5;
 }
 
 .flags-container {
@@ -35,4 +85,13 @@
         transform: scale(1.11);
         box-shadow: 0 0 10px 3px rgba(0, 150, 255, 0.9);
     }
+}
+
+.ingredients-list {
+    list-style: disc inside;
+    padding-left: 0;   
+}
+
+.ingredient-name {
+    font-weight: bold;
 }

@@ -109,3 +109,16 @@
   color: #888;
   margin-left: 9px;
 }
+
+.count-eye {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.no-data-row td {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #5d5d5d;
+  padding: 2rem;
+}

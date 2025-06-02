@@ -1,4 +1,4 @@
-<h2 class="main-title">{{ categoryName }}</h2>
+<h2 class="main-title">{{ categoryName }} Collection</h2>
 
 <div *ngIf="loading" class="loading-spinner">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -12,7 +12,8 @@
             </button>
 
             <div #slider class="slider" (wheel)="onWheel($event)">
-                <a *ngFor="let cocktail of cocktails" [routerLink]="['/drink', cocktail.idDrink, getSlug(cocktail.strDrink)]" class="cocktail-link">
+                <a *ngFor="let cocktail of cocktails" [routerLink]="['/drink', cocktail.idDrink, getSlug(cocktail.strDrink)]"
+                   class="cocktail-link">
                     <mat-card class="cocktail-card">
                         <img mat-card-image [src]="cocktail.strDrinkThumb" alt="{{ cocktail.strDrink }}">
                         <mat-card-title>{{ cocktail.strDrink }}</mat-card-title>
