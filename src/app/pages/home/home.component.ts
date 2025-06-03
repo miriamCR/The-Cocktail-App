@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common'; // To use *ngIf, *ngFor, [ngSwitch]
 import { Router, RouterLink } from '@angular/router';
 
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 import { CocktailService } from '../../services/cocktail.service';
 import { IngredientsDialogComponent } from './ingredients-dialog/ingredients-dialog.component';
@@ -20,7 +22,7 @@ import { catchError, forkJoin, of } from 'rxjs';
 
 export interface Ingredient {
   strIngredient: string;
-  strMeasure: string;
+  strMeasure: string | null;
 }
 
 export interface Cocktail {
@@ -29,12 +31,12 @@ export interface Cocktail {
   strDrink: string;
   strCategory: string;
   strAlcoholic: string;
-  ingredients: Ingredient[]; //Calcular
-  countIngredients: number; // Calcular
-  dateModified?: string; // Opcional porque puede faltar 
+  ingredients: Ingredient[];
+  countIngredients: number;
+  dateModified: string | null;
 }
 
-//Funcion auxiliar para guardar los ingredients(name and measure)
+// Save the ingredients (name and measure)
 function extractIngredients(cocktail: any): Ingredient[]{
   const ingredients: Ingredient[] = [];
 
@@ -42,7 +44,7 @@ function extractIngredients(cocktail: any): Ingredient[]{
     const name = cocktail[`strIngredient${i}`];
     if (name && name.trim() !=='') {
       const measure = cocktail[`strMeasure${i}`];
-      ingredients.push({strIngredient: name,strMeasure: measure});
+      ingredients.push({ strIngredient: name, strMeasure: measure });
     }
   }
   return ingredients;
@@ -53,24 +55,27 @@ function extractIngredients(cocktail: any): Ingredient[]{
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
+    MatCardModule,
+    MatIconModule,
     MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
     MatSelectModule,
     MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
     MatTooltipModule,
-    MatIconModule,
     MatDialogModule,
-    MatCardModule,
-    RouterLink
+    MatPaginatorModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['idDrink', 'strDrinkThumb', 'strDrink', 'strCategory',
                                 'strAlcoholic', 'countIngredients', 'dateModified'];
   dataSource = new MatTableDataSource<Cocktail>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   currentSearchMessage: string = '';
   searchType: string = 'firstLetter';
@@ -88,6 +93,9 @@ export class HomeComponent implements OnInit {
   nonAlcoholicCount: number = 0;
   optionalAlcoholCount: number = 0;
 
+  isLoading: boolean = true;
+  firstSearchCocktailName: boolean = true;
+
   constructor(private cocktailService: CocktailService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -95,6 +103,10 @@ export class HomeComponent implements OnInit {
     this.loadAllCategories();
     this.loadAllIngredients();
     this.loadAllAlcoholicTypes();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   onSearchTypeChange(newType: string) {
@@ -108,33 +120,25 @@ export class HomeComponent implements OnInit {
       this.searchByCategory(this.selectedCategory);
     } else if(newType === 'ingredient' && this.ingredients.length > 0) {
       this.searchByIngredient(this.selectedIngredient);
+    } else if(newType === 'cocktailName') {
+      this.firstSearchCocktailName = true;
+      this.searchByCocktailName("");
     }
   }
 
-  updateSearchMessage(type: 'firstLetter' | 'category' | 'ingredient' |'alcoholicType' | 'cocktailName', value: string) {
+  updateSearchMessage(type: 'firstLetter' | 'category' | 'ingredient' | 'cocktailName', value: string) {
     switch(type) {
       case 'firstLetter':
-        this.currentSearchMessage = `Showing cocktails starting by "${value}"`;
+        this.currentSearchMessage = `Showing cocktails starting by "${value}" (${this.totalCount} results)`;
         break;
       case 'category':
-        this.currentSearchMessage = `Showing cocktails from the category "${value}"`;
+        this.currentSearchMessage = `Showing cocktails from the category "${value}" (${this.totalCount} results)`;
         break;
       case 'ingredient':
-        this.currentSearchMessage = `Showing cocktails containing the ingredient "${value}"`;
-        break;
-      case 'alcoholicType':
-        if (value === 'Alcoholic') {
-          this.currentSearchMessage = 'Showing alcoholic cocktails';
-        } else if (value === 'Non alcoholic') {
-          this.currentSearchMessage = 'Showing non-alcoholic cocktails';
-        } else if (value === 'Optional alcohol') {
-          this.currentSearchMessage = 'Showing cocktails with optional alcohol';
-        } else {
-          this.currentSearchMessage = `Showing cocktails (${value})`;
-        }
+        this.currentSearchMessage = `Showing cocktails containing the ingredient "${value}"(${this.totalCount} results)`;
         break;
       case 'cocktailName':
-        this.currentSearchMessage = `Showing results for cocktails containing "${value}" in the name`;
+        this.currentSearchMessage = `Showing results for cocktails containing "${value}" in the name (${this.totalCount} results)`;
         break;
     }
   }
@@ -142,9 +146,9 @@ export class HomeComponent implements OnInit {
   loadAllCategories() {
     this.cocktailService.getAllCategories().subscribe(res => {
       this.categories = res.drinks.map((c: any) => c.strCategory)
-                                 .sort((a: string, b: string) => a.localeCompare(b));
+                                  .sort((a: string, b: string) => a.localeCompare(b));
 
-      if(this.categories.length > 0 && !this.selectedCategory)
+      if (this.categories.length > 0 && !this.selectedCategory)
         this.selectedCategory = this.categories[0];
     });
   }
@@ -152,9 +156,9 @@ export class HomeComponent implements OnInit {
   loadAllIngredients() {
     this.cocktailService.getAllIngredients().subscribe(res => {
       this.ingredients = res.drinks.map((i: any) => i.strIngredient1)
-                                  .sort((a: string, b: string) => a.localeCompare(b));
+                                   .sort((a: string, b: string) => a.localeCompare(b));
 
-      if(this.ingredients.length > 0 && !this.selectedIngredient)
+      if (this.ingredients.length > 0 && !this.selectedIngredient)
         this.selectedIngredient = this.ingredients[0];
     });
   }
@@ -162,19 +166,22 @@ export class HomeComponent implements OnInit {
   loadAllAlcoholicTypes() {
     this.cocktailService.getAllAlcoholicTypes().subscribe(res => {
       this.alcoholicTypes = res.drinks.map((alc: any) => alc.strAlcoholic)
-                                     .sort((a: string, b: string) => a.localeCompare(b));
+                                      .sort((a: string, b: string) => a.localeCompare(b));
     });
   }
 
   searchByFirstLetter(firstLetter: string) {
+    this.isLoading = true;
     this.selectedLetter = firstLetter;
     this.cocktailService.getCocktailsByFirstLetter(firstLetter).subscribe(res => {
-      this.updateSearchMessage('firstLetter', firstLetter);
       this.processData(res);
+      this.updateSearchMessage('firstLetter', firstLetter);
+      this.isLoading = false;
     });
   }
 
   searchByCategory(category: string) {
+    this.isLoading = true;
     this.cocktailService.getCocktailsByCategory(category).subscribe(res => {
       const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
       const requests = ids.map((id: string) =>
@@ -188,15 +195,17 @@ export class HomeComponent implements OnInit {
 
       forkJoin(requests).subscribe((results: any) => {
         console.log('Resultados de la API (category):', results); // Raw results from API
-        console.log('Resultados aplanados:', { drinks: results.map( (r: any) => r.drinks).flat() }); // Results
+        console.log('Resultados aplanados:', {drinks: results.map( (r: any) => r.drinks).flat() }); // Results
 
-        this.updateSearchMessage('category', category);
         this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+        this.updateSearchMessage('category', category);
+        this.isLoading = false;
       });
     });
   }
 
   searchByIngredient(ingredient: string) {
+    this.isLoading = true;
     this.cocktailService.getCocktailsByIngredient(ingredient).subscribe(res => {
       const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
       const requests = ids.map((id: string) =>
@@ -209,19 +218,22 @@ export class HomeComponent implements OnInit {
       );
 
       forkJoin(requests).subscribe((results: any) => {
-        console.log('Resultados de la API (ingredient):', results);
-        console.log('Resultados aplanados:', { drinks: results.map( (r: any) => r.drinks).flat() });
-
-        this.updateSearchMessage('ingredient', ingredient);
         this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+        this.updateSearchMessage('ingredient', ingredient);
+        this.isLoading = false;
       });
     });
   }
 
   searchByCocktailName(cocktailName: string) {
+    this.isLoading = true;
     this.cocktailService.getCocktailsByCocktailName(cocktailName).subscribe(res => {
-      this.updateSearchMessage('cocktailName', cocktailName);
       this.processData(res);
+      if (!this.firstSearchCocktailName) {
+        this.updateSearchMessage('cocktailName', cocktailName);
+      }
+      this.isLoading = false;
+      this.firstSearchCocktailName = false;
     });
   }
 
@@ -247,19 +259,19 @@ export class HomeComponent implements OnInit {
         this.optionalAlcoholCount++;
       }
       
-    // Algunos endpoints solo devuelven id, nombre y thumb, otros más datos. Si no viene con ingredientes, no se pueden mostrar countIngredients correctamente
       const ingredients = extractIngredients(cocktail);
       return {
-        ...cocktail, // Operador spread, copia todos los campos de cocktail
-        ingredients, // Ya tiene el campo ingredients[] de la Interface lleno
-        countIngredients: ingredients.length, // Ya tiene el campo countIngredients de la Interface lleno
+        ...cocktail, // Spread operator
+        ingredients,
+        countIngredients: ingredients.length,
       };
     });
 
     // Sort table data
     processedCocktails.sort((a: Cocktail, b: Cocktail) => a.strDrink.localeCompare(b.strDrink));
+    this.isLoading  = true;
     this.dataSource.data = processedCocktails;
-    console.log('(funcionPROCESSDATA)Lista de cócteles con ingredientes:', processedCocktails);
+    this.paginator.firstPage(); // Reset the paginator to the first page
   }
 
   getSlug(name: string): string {
@@ -275,5 +287,4 @@ export class HomeComponent implements OnInit {
   goToAlcoholType(type: string) {
     this.router.navigate(['/alcohol-type', type]);
   }
-
 }

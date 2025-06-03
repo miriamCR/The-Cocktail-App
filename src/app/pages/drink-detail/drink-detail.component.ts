@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Para usar *ngIf, *ngFor, [ngSwitch]
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute} from '@angular/router';
 import { RouterLink } from '@angular/router';
 
@@ -24,8 +24,8 @@ export class DrinkDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private cocktailService: CocktailService) {}
 
-  ngOnInit(): void { // Listen for route changes
-    this.route.paramMap
+  ngOnInit(): void {
+    this.route.paramMap // Listen for route changes
       .pipe(
         switchMap(params => {
           const id = params.get('id');

@@ -4,74 +4,6 @@
   font-size: 2.2rem;
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.letters-container {
-  margin-top: 1rem;
-}
-
-.letters-container button {
-  border: 1px solid #ccc;
-  min-width: 50px;
-}
-
-.letters-container button.selected-letter {
-  background-color: #1976d2;
-  color: white;
-}
-
-.table-wrapper {
-  width: 72%;
-  margin-top: 1.5rem;
-}
-
-.drink-counts {
-  margin-top: 1.5rem;
-  margin-bottom: 3.5rem;
-  display: flex;
-  gap: 30px;
-  font-size: 1.2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.count {
-  padding: 8px 14px;
-  border-radius: 5px;
-  min-width: 140px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-.title {
-  font-weight: 600;
-  margin-right: 2px;
-}
-
-.total {
-  background-color: #0369e5;
-  color: white;
-}
-
-.alcoholic {
-  background-color: #ff6666;
-  color: #333;
-}
-
-.non-alcoholic {
-  background-color: #5ffd67;
-  color: #333;
-}
-
-.optional-alcohol {
-  background-color: #ffce53;
-  color: #333;
-}
-
 .alcohol-card-container {
   display: flex;
   justify-content: center;
@@ -110,6 +42,53 @@
   margin-left: 9px;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-type-container {
+  max-width: 72%;
+  text-align: center;
+}
+
+.letters-container {
+  margin-bottom: 20px;
+}
+
+.letters-container button {
+  border: 1px solid #ccc;
+  min-width: 50px;
+}
+
+.letters-container button.selected-letter {
+  background-color: #1976d2;
+  color: white;
+}
+
+.loading-spinner {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.search-info-message {
+  background-color: #f1f8fc30;
+  border-top: 0.5px solid #90caf969;
+  border-bottom: 0.5px solid #90caf969;
+  padding: 7px 0;
+  width: 72%;
+  color: #0d48a1c9;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.table-wrapper {
+  width: 72%;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .count-eye {
   display: flex;
   align-items: center;
@@ -121,4 +100,48 @@
   font-size: 1.1rem;
   color: #5d5d5d;
   padding: 2rem;
+}
+
+.drink-counts {
+  max-width: 72%;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  gap: 30px;
+  font-size: 1.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.count {
+  padding: 8px 14px;
+  border-radius: 0px;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.title {
+  font-weight: 600;
+  margin-right: 2px;
+}
+
+.total {
+  background-color: #0369e5;
+  color: white;
+}
+
+.alcoholic {
+  background-color: #ff6666;
+  color: #333;
+}
+
+.non-alcoholic {
+  background-color: #5ffd67;
+  color: #333;
+}
+
+.optional-alcohol {
+  background-color: #ffce53;
+  color: #333;
 }

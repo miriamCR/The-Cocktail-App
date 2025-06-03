@@ -29,11 +29,12 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 5px;
+  background-color: seashell;
 }
 
 .cocktail-card img {
-  width: 100%;            // La img ocupa todo el ancho de la tarjeta
-  object-fit: contain;    // No se recorta la imagen
+  width: 100%;
+  object-fit: contain;    // The image is not cropped
 }
 
 .cocktail-card mat-card-title {
@@ -44,7 +45,7 @@
   line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;        // Puntos suspensivos
+  text-overflow: ellipsis;        // ...
 } 
 
 .loading-spinner {

@@ -1,10 +1,10 @@
 <h2 class="main-title">{{ categoryName }} Collection</h2>
 
-<div *ngIf="loading" class="loading-spinner">
+<div *ngIf="isLoading" class="loading-spinner">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="!isLoading">
     <div *ngIf="cocktails.length > 0; else noResults">
         <div class="slider-container">
             <button mat-icon-button (click)="scrollLeft()">
@@ -29,5 +29,5 @@
 </div>
 
 <ng-template #noResults>
-    <p>No se encontraron cócteles para esta categoría.</p>
+    <p>No drinks found for this category.</p>
 </ng-template>

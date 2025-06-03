@@ -2,7 +2,9 @@
 
 <mat-dialog-content>
     <div *ngFor="let ingredient of data">
-        <img [src]="getIngredientImage(ingredient.strIngredient)" alt="{{ingredient.strIngredient}}" width="170px"/>
+        <img [ngSrc]="getIngredientImage(ingredient.strIngredient)" alt="{{ingredient.strIngredient}}"
+             width="170" height="170"
+             priority/> <!-- Lazy loading using NgOptimizedImage -->
         <span class="ingredient-name">{{ ingredient.strIngredient }}</span>
         <span *ngIf="ingredient.strMeasure"> - {{ ingredient.strMeasure }}</span>
     </div>

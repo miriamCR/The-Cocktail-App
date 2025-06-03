@@ -4,6 +4,12 @@ h2[mat-dialog-title] {
     margin-bottom: 20px;
 }
 
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
 mat-dialog-content div {
     display: flex;
     align-items: center;

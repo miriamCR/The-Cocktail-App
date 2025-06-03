@@ -9,7 +9,7 @@
     align-items: center;
     max-width: 1550px;
     height: 100%;
-    gap: 1rem;              // separar los botones del slider
+    gap: 1rem;
     margin: 2rem auto;
     padding: 0 2rem;  
 }
@@ -31,9 +31,10 @@
 
 .cocktail-card {
     min-width: 344px;
-    max-width: 400px;       // límite máximo para pantallas grandes
+    max-width: 400px;
     flex-shrink: 0;         // No se hace mas pequeño si no cabe
     transition: transform 0.1s ease, box-shadow 0.1s ease;
+    background-color: seashell;
 }
 
 .cocktail-card:hover {
@@ -42,8 +43,8 @@
 }
 
 .cocktail-card img {
-    width: 100%;            // La img ocupa todo el ancho de la tarjeta
-    object-fit: contain;    // No se recorta la imagen
+    width: 100%;
+    object-fit: contain;    // The image is not cropped
     border-radius: 4px 4px 0 0;
 }
 
@@ -55,7 +56,7 @@
     line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;        // Puntos suspensivos
+    text-overflow: ellipsis;        // ...
 } 
 
 .loading-spinner {

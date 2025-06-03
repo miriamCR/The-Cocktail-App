@@ -1,6 +1,7 @@
 <main class="main">
   <h1 class="main-title">Welcome to The Cocktail App 🎉</h1>
 
+  <!----------------------------------------------------CARDS(ALCOHOL TYPE)--------------------------------------------->
   <div class="alcohol-card-container">
     <mat-card class="alcohol-card" *ngFor="let alcoholicType of alcoholicTypes" (click)="goToAlcoholType(alcoholicType)">
       <mat-card-content>
@@ -24,7 +25,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div [ngSwitch]="searchType">
+    <div [ngSwitch]="searchType" class="search-type-container">
       <!-- First letter: buttons for letters -->
       <div *ngSwitchCase="'firstLetter'" class="letters-container">
         <button *ngFor="let l of letters" mat-button (click)="searchByFirstLetter(l)"
@@ -58,12 +59,16 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="currentSearchMessage" class="search-info-message" style="margin-top: 7px;">
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="currentSearchMessage && !isLoading" class="search-info-message">
       {{ currentSearchMessage }}
     </div>
     
-    <!----------------------------------------------------------TABLE------------------------------------------------------>
-    <div class="table-wrapper">
+    <!------------------------------------------------------------TABLE-------------------------------------------------------->
+    <div class="table-wrapper" [hidden]="isLoading">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- ID Column -->
         <ng-container matColumnDef="idDrink">
@@ -138,15 +143,23 @@
           </td>
         </tr>
       </table>
+      
+      <!------------------PAGINATOR---------------------->
+      <div [hidden]="dataSource.data.length === 0">
+        <mat-paginator [length]="dataSource.data.length"
+                       [pageSize]="10"
+                       [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons>
+        </mat-paginator>
+      </div>
     </div>
 
-    <!-------------------------------------------------------TABLE-FOOTER------------------------------------------------------>
-    <div class="drink-counts">
+    <!--------------------------------------------------TABLE-FOOTER(COUNTS)-------------------------------------------->
+    <div class="drink-counts" *ngIf="!isLoading" >
       <span class="count total"><span class="title">Total:</span> {{ totalCount }}</span>
       <span class="count alcoholic"><span class="title">Alcoholic:</span> {{ alcoholicCount }}</span>
       <span class="count non-alcoholic"><span class="title">Non alcoholic:</span> {{ nonAlcoholicCount }}</span>
       <span class="count optional-alcohol"><span class="title">Optional alcohol:</span> {{ optionalAlcoholCount }}</span>
     </div>
-    
   </div>
 </main>

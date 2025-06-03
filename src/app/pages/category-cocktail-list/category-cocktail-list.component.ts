@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 import { CocktailService } from '../../services/cocktail.service';
 import { Cocktail } from '../home/home.component';
@@ -14,7 +14,7 @@ import { slugify } from '../../utils/utils';
 @Component({
   selector: 'app-category-cocktail-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatProgressSpinnerModule, RouterLink, MatIconModule, MatButtonModule],
+  imports: [CommonModule, RouterLink, MatProgressSpinnerModule, MatButtonModule, MatIconModule, MatCardModule],
   templateUrl: './category-cocktail-list.component.html',
   styleUrls: ['./category-cocktail-list.component.scss']
 })
@@ -23,32 +23,40 @@ export class CategoryCocktailListComponent implements OnInit {
 
   categoryName: string = '';
   cocktails: Cocktail[] = [];
-  loading: boolean = true;
+  isLoading: boolean = true;
 
   constructor(private route: ActivatedRoute, private cocktailService: CocktailService) {}
 
   ngOnInit(): void {
     this.categoryName = this.route.snapshot.paramMap.get('categoryName') || '';
     if (this.categoryName) {
-      this.loading = true;
+      this.isLoading = true;
       this.cocktailService.getCocktailsByCategory(this.categoryName).subscribe({
         next: (res) => {
           if (Array.isArray(res.drinks)){
             this.cocktails = res.drinks;
-          } else { // Por ejemplo, cuando res={drinks:'no data found'}
+          } else { // For instance when res={drinks:'no data found'}
             this.cocktails = [];
-            console.warn('No hay datos o el formato es incorrecto:', res.drinks);
+            console.warn('There is no data or the format is incorrect:', res.drinks);
           }
-          this.loading = false;
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error al cargar cócteles:', error);
+          console.error('Error loading cocktails:', error);
           this.cocktails = [];
-          this.loading = false;
+          this.isLoading = false;
         }
       });
     } else {
-      this.loading = false;
+      this.isLoading = false;
+    }
+  }
+
+  onWheel(event: WheelEvent) {
+    if (event.deltaY !== 0 && this.slider) {
+      event.preventDefault();
+      const scrollAmount = event.deltaY * 6;
+      this.slider.nativeElement.scrollLeft += scrollAmount;
     }
   }
   
@@ -62,13 +70,5 @@ export class CategoryCocktailListComponent implements OnInit {
 
   getSlug(name: string): string {
     return slugify(name);
-  }
-
-  onWheel(event: WheelEvent) {
-    if (event.deltaY !== 0 && this.slider) {
-      event.preventDefault();
-      const scrollAmount = event.deltaY * 6;
-      this.slider.nativeElement.scrollLeft += scrollAmount;
-    }
   }
 }

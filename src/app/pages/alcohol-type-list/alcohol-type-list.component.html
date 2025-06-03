@@ -1,10 +1,10 @@
 <h2 class="main-title">{{ alcoholicType }} Cocktails</h2>
 
-<div *ngIf="loading" class="loading-spinner">
+<div *ngIf="isLoading" class="loading-spinner">
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="!isLoading">
   <div *ngIf="cocktails.length > 0; else noResults">
     <div class="cocktail-grid">
       <a *ngFor="let cocktail of cocktails" [routerLink]="['/drink', cocktail.idDrink, getSlug(cocktail.strDrink)]" 
@@ -19,5 +19,5 @@
 </div>
 
 <ng-template #noResults>
-  <p>No drins found for this alcohol type.</p>
+  <p>No drinks found for this alcohol type.</p>
 </ng-template>
