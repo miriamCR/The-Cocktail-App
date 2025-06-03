@@ -1,55 +1,81 @@
-# TheCocktailApp
+# The Cocktail App 🍹
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
 
-## Development server
+Aplicación web desarrollada en Angular 19 que permite explorar diferentes cócteles obtenidos de la API pública [TheCocktailDB](https://www.thecocktaildb.com/api.php).
 
-To start a local development server, run:
 
+## 🧪 Funcionalidades principales
+- **Búsqueda y filtrado de cócteles por:**
+    - Primera letra del nombre
+    - Categoría
+    - Ingrediente
+    - Nombre
+    - Contenido de alcohol
+
+- **Visualización de cócteles en tabla**, mostrando:
+    - ID (clicable, nos lleva a una página donde se muestran más detalles del cóctel)
+    - Imagen
+    - Nombre
+    - Categoría
+    - Tipo (Alcohólico, no alcohólico o con alcohol opcional)
+    - Cantidad de ingredientes (abre un modal con lista de ingredientes, medidas e imágenes)
+    - Fecha de modificación
+
+- **Pie de tabla con contadores de cócteles** según la búsqueda realizada: 
+    - Número total de cócteles
+    - Número de cócteles alcohólicos
+    - Número de cócteles no alcohólicos
+    - Número de cócteles con alcohol opcional
+
+- **Botón de cóctel aleatorio** accesible desde cualquier parte de la aplicación.
+
+- **Página de detalles del cóctel,** mostrando:
+    - Nombre
+    - Imagen
+    - Categoría (clicable, con slider de cócteles de esa categoría)
+    - Contenido de alcohol
+    - Instrucciones (con opción de cambiar el idioma de las instrucciones)
+    - Ingredientes y medidas
+
+## 🚀 Tecnologías utilizadas
+- Angular CLI (v19.2.12)
+- Angular 19
+- Angular Material
+- Typescript
+- HTML/SCSS
+- API pública TheCocktailDB
+
+## ▶️ Guía para ejecutar el proyecto
+1. **Clona este repositorio**:
 ```bash
+git clone https://github.com/miriamCR/The-Cocktail-App.git
+cd The-Cocktail-App
+````
+
+2. **Instala las dependencias**:
+````bash
+npm install
+````
+
+3. **Ejecuta la aplicación en desarrollo**:
+````bash
 ng serve
-```
+````
+Abre tu navegador y navegua a http://localhost:4200/.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+4. **Genera el build para producción**:
+````bash
+ng build --configuration production
+````
+Esto creará una versión optimizada en la carpeta `dist/`. A continuación, podrás desplegar esta carpeta en un hosting para hacer que la aplicación sea accesible de forma online.
 
-## Code scaffolding
+## 📚 Documentación y recursos utilizados
+- [Angular](https://angular.dev/overview)
+- [Angular Material](https://material.angular.dev)
+- [TheCocktailDB](https://www.thecocktaildb.com/api.php)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-```bash
-ng generate component component-name
-```
+### Iconos
+* Los iconos de las banderas son de <a href="https://www.countryflags.com/" title="Countryflags">www.countryflags.com</a>
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
