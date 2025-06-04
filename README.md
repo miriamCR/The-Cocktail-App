@@ -70,7 +70,7 @@ ng build --configuration production
 Esto creará una versión optimizada en la carpeta `dist/`. A continuación, podrás desplegar esta carpeta en un hosting para hacer que la aplicación sea accesible de forma online.
 
 ### :warning: Notas
-Para que funcione correctamente esta guía de instalación, se recomienda que utilice las ultimas versiones de node (la aplicación fue desarrollada con la v22.15.1).
+Para que funcione correctamente esta guía de instalación, se recomienda que utilices las últimas versiones de node (la aplicación fue desarrollada con la v22.15.1).
 
 ## 📚 Documentación y recursos utilizados
 - [Angular Docs](https://angular.dev/overview)
