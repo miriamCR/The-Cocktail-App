@@ -1,7 +1,7 @@
 # The Cocktail App 🍹
 
 
-Aplicación web desarrollada en Angular 19 que permite explorar diferentes cócteles obtenidos de la API pública [TheCocktailDB](https://www.thecocktaildb.com/api.php).
+Aplicación web desarrollada en Angular 19 que permite explorar diferentes cócteles obtenidos a través de la API pública [TheCocktailDB](https://www.thecocktaildb.com/api.php).
 
 
 ## 🧪 Funcionalidades principales
@@ -17,7 +17,7 @@ Aplicación web desarrollada en Angular 19 que permite explorar diferentes cóct
     - Imagen
     - Nombre
     - Categoría
-    - Tipo (Alcohólico, no alcohólico o con alcohol opcional)
+    - Tipo (alcohólico, no alcohólico o con alcohol opcional)
     - Cantidad de ingredientes (abre un modal con lista de ingredientes, medidas e imágenes)
     - Fecha de modificación
 
@@ -61,7 +61,7 @@ npm install
 ````bash
 ng serve
 ````
-Abre tu navegador y navegua a http://localhost:4200/.
+Abre tu navegador y navega a http://localhost:4200/.
 
 4. **Genera el build para producción**:
 ````bash
@@ -69,11 +69,14 @@ ng build --configuration production
 ````
 Esto creará una versión optimizada en la carpeta `dist/`. A continuación, podrás desplegar esta carpeta en un hosting para hacer que la aplicación sea accesible de forma online.
 
-## 📚 Documentación y recursos utilizados
-- [Angular](https://angular.dev/overview)
-- [Angular Material](https://material.angular.dev)
-- [TheCocktailDB](https://www.thecocktaildb.com/api.php)
+### :warning: Notas
+Para que funcione correctamente esta guía de instalación, se recomienda que utilice las ultimas versiones de node (la aplicación fue desarrollada con la v22.15.1).
 
+## 📚 Documentación y recursos utilizados
+- [Angular Docs](https://angular.dev/overview)
+- [Angular Material](https://material.angular.dev)
+- [StackOverflow](https://stackoverflow.com/questions)
+- [TheCocktailDB API](https://www.thecocktaildb.com/api.php)
 
 ### Iconos
 * Los iconos de las banderas son de <a href="https://www.countryflags.com/" title="Countryflags">www.countryflags.com</a>
