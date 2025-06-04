@@ -96,6 +96,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isLoading: boolean = true;
   firstSearchCocktailName: boolean = true;
 
+  failedIdsCount: number = 0;
+
   constructor(private cocktailService: CocktailService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -182,22 +184,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   searchByCategory(category: string) {
     this.isLoading = true;
+    this.failedIdsCount = 0;
     this.cocktailService.getCocktailsByCategory(category).subscribe(res => {
       const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
       const requests = ids.map((id: string) =>
         this.cocktailService.getFullCocktailDetailsById(id).pipe(
           catchError(err => {
-            console.error(`Error al obtener el coctel con id${id}:`, err);
+            this.failedIdsCount++;
             return of(null);
           })
         )
       );
 
       forkJoin(requests).subscribe((results: any) => {
-        console.log('Resultados de la API (category):', results); // Raw results from API
-        console.log('Resultados aplanados:', {drinks: results.map( (r: any) => r.drinks).flat() }); // Results
+        console.log('Todos los resultados de la API (category):', results); // Raw results from API
 
-        this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+        const validResults = results.filter((r: any) => r != null);
+        const drinks = validResults.map( (r: any) => r.drinks).flat();
+        console.log('Resultados validos aplanados:', drinks); // Valid results
+
+        this.processData({ drinks });
         this.updateSearchMessage('category', category);
         this.isLoading = false;
       });
@@ -206,19 +212,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   searchByIngredient(ingredient: string) {
     this.isLoading = true;
+    this.failedIdsCount = 0;
     this.cocktailService.getCocktailsByIngredient(ingredient).subscribe(res => {
       const ids = res.drinks.map((cocktail: Cocktail) => cocktail.idDrink);
       const requests = ids.map((id: string) =>
         this.cocktailService.getFullCocktailDetailsById(id).pipe(
           catchError(err => {
-            console.error(`Error al obtener el coctel con id${id}:`, err);
+            this.failedIdsCount++;
             return of(null);
           })
         )
       );
 
       forkJoin(requests).subscribe((results: any) => {
-        this.processData({ drinks: results.map( (r: any) => r.drinks).flat() });
+        const validResults = results.filter((r: any) => r != null);
+        const drinks = validResults.map( (r: any) => r.drinks).flat();
+
+        this.processData({ drinks });
         this.updateSearchMessage('ingredient', ingredient);
         this.isLoading = false;
       });
@@ -244,7 +254,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.optionalAlcoholCount = 0;
 
     if (!res.drinks || res.drinks === 'no data found') {
-      console.log("processdata NODRINKS de homecomponent.ts");
+      console.log("ProcessData() -> NO DRINKS");
       this.dataSource.data = [];
       return;
     }

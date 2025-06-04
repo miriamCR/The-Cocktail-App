@@ -40,6 +40,11 @@ Aplicación web desarrollada en Angular 19 que permite explorar diferentes cóct
     - Instrucciones (con opción de cambiar el idioma de las instrucciones)
     - Ingredientes y medidas
 
+> ⚠️ **Limitación de la API pública**
+>
+> Esta aplicación depende de la API gratuita de [TheCocktailDB](https://www.thecocktaildb.com/api.php), la cual puede tener ciertas restricciones de uso. A veces, si se realizan muchas peticiones seguidas (por ejemplo, al cambiar de filtro muy rápido o pulsar varias veces el botón de cóctel aleatorio), puede ocurrir un fallo temporal debido a un límite de peticiones por tiempo. En esos casos, puede parecer que la aplicación se queda cargando indefinidamente o mostrar que no hay datos. Si ocurre, se recomienda esperar unos segundos antes de intentarlo de nuevo o refrescar la página web.
+
+
 ## 🚀 Tecnologías utilizadas
 - Angular CLI (v19.2.12)
 - Angular 19
@@ -76,7 +81,8 @@ Esto creará una versión optimizada en la carpeta `dist/`. A continuación, pod
   <br>
   <br>
 
-> **ℹ️ Nota:**
+> **ℹ️ Nota**
+>
 > Para que funcione correctamente esta guía de instalación, se recomienda que utilices las últimas versiones de **Node.js** (la aplicación fue desarrollada con la v22.15.1).
 
 ## 📚 Documentación y recursos utilizados

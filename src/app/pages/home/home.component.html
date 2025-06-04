@@ -66,6 +66,11 @@
     <div *ngIf="currentSearchMessage && !isLoading" class="search-info-message">
       {{ currentSearchMessage }}
     </div>
+
+    <div *ngIf="failedIdsCount > 0 && !isLoading" class="warning-message">
+      ⚠️ Could not be loaded {{ failedIdsCount }} drinks
+    </div>
+
     
     <!------------------------------------------------------------TABLE-------------------------------------------------------->
     <div class="table-wrapper" [hidden]="isLoading">
