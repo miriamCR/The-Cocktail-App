@@ -1,7 +1,10 @@
 # The Cocktail App 🍹
 
+🌐 **Demo en línea**:  [https://thecocktailapp-mcr.netlify.app/](https://thecocktailapp-mcr.netlify.app/)
 
 Aplicación web desarrollada en Angular 19 que permite explorar diferentes cócteles obtenidos a través de la API pública [TheCocktailDB](https://www.thecocktaildb.com/api.php).
+
+
 
 
 ## 🧪 Funcionalidades principales
@@ -67,10 +70,14 @@ Abre tu navegador y navega a http://localhost:4200/.
 ````bash
 ng build --configuration production
 ````
-Esto creará una versión optimizada en la carpeta `dist/`. A continuación, podrás desplegar esta carpeta en un hosting para hacer que la aplicación sea accesible de forma online.
+Esto creará una versión optimizada en la carpeta `dist/`. A continuación, podrás desplegar esta carpeta en un hosting para hacer que la aplicación sea accesible de forma online, por ejemplo, **Netlify**.
 
-### :warning: Notas
-Para que funcione correctamente esta guía de instalación, se recomienda que utilices las últimas versiones de node (la aplicación fue desarrollada con la v22.15.1).
+  💡Si no quieres instalar nada localmente, puedes acceder a la [demo en linea](https://thecocktailapp-mcr.netlify.app/).
+  <br>
+  <br>
+
+> **ℹ️ Nota:**
+> Para que funcione correctamente esta guía de instalación, se recomienda que utilices las últimas versiones de **Node.js** (la aplicación fue desarrollada con la v22.15.1).
 
 ## 📚 Documentación y recursos utilizados
 - [Angular Docs](https://angular.dev/overview)
